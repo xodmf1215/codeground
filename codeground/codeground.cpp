@@ -4,6 +4,7 @@
 // 아래 기본 제공된 코드를 수정 또는 삭제하고 본인이 코드를 사용하셔도 됩니다.
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
 
 class num_selection {
 public:
@@ -43,13 +44,16 @@ int num_selection::init(void) {
 }
 class expect_candidate {
 public:
+	static int compare(const void * a, const void * b) {
+		return (*(int*)a - *(int*)b);
+	}
 	int init(void) {
 		setbuf(stdout, NULL);
 
 		int TC;
 		int test_case;
 		int i,n;
-		int count,tmp,max;
+		int count,tmp,max,pos;
 		short arr[300000];
 		scanf("%d", &TC);
 		for (test_case = 1; test_case <= TC; test_case++) {
@@ -58,20 +62,61 @@ public:
 			for (i = 0; i < n; i++) {
 				scanf("%d", &tmp);
 				arr[i] = tmp;
-				if (tmp > max) max = tmp;
 			}
+			qsort(arr, n, sizeof(int),compare);//sort + input
+
+			for (i = 0; i < n; i++) {
+				if (arr[i] +n -i > max) max = arr[i] + n - i;
+			}
+
 			printf("Case #%d\n", test_case);
 			for (i = 0; i < n; i++) {
-				if ((max - n) < arr[i]) count++;
+				if ((max - n) <= arr[i]) count++;
 			}
 			printf("%d\n", count);
 		}
 		return 0;
 	};
 };
+class test_study {
+public:
+	static int compare(const void *a, const void *b) {
+		if ((*(int*)a - *(int*)b) > 0) return -1;
+		else return 1;
+	}
+	int init() {
+		setbuf(stdout, NULL);
+		int arr[200000];
+		int TC;
+		int test_case;
+		int i, n, k,count;
+
+		scanf("%d", &TC);
+		for (test_case = 1; test_case <= TC; test_case++) {
+			// 이 부분에서 알고리즘 프로그램을 작성하십시오. 기본 제공된 코드를 수정 또는 삭제하고 본인이 코드를 사용하셔도 됩니다.
+			count = 0;
+			scanf("%d", &n);
+			scanf("%d", &k);
+			for (i = 0; i < n; i++) {
+				scanf("%d", &arr[i]);
+			}
+			qsort(arr, n, sizeof(int), compare);
+
+			// 이 부분에서 정답을 출력하십시오.
+			printf("Case #%d\n", test_case);
+			for (i = 0; i < k; i++) {
+				count += arr[i];
+			}
+			printf("%d\n", count);
+		}
+
+		return 0;	// 정상종료 시 반드시 0을 리턴해야 합니다.
+	}
+};
 int main(void) {
 	//num_selection n_s;
-	expect_candidate n_s;
+	//expect_candidate n_s;
+	test_study n_s;
 	n_s.init();
 	return 0;
 }
